@@ -14,6 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Important changes folded into this keymap on 2023-10-01T18:11:21Z
+// https://www.reddit.com/r/qmk/comments/168h56g/missing_definitions/
+// https://docs.qmk.fm/#/ChangeLog/20221126?id=keycodes-overhaul-core-changes
+
 #include QMK_KEYBOARD_H
 #include "muse.h"
 #include "features/casemodes.h"
@@ -190,8 +194,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_ADJUST] = LAYOUT_preonic_grid(
   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
   _______, QK_BOOT, DB_TOGG, _______, _______, _______, _______, _______, _______, _______, _______, RGB_TOG,
-  _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, _______, _______, _______, _______, _______,
-  _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______,
+  _______, _______, MU_NEXT, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, _______, _______, _______, _______, _______,
+  _______, AU_PREV, AU_NEXT, MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______,
   EE_CLR,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
