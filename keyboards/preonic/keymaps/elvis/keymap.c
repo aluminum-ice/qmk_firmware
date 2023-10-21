@@ -57,10 +57,10 @@ enum preonic_keycodes {
   GITCOMM, // git commit -m ''
   GITSTAT, // git status
   GITBRCH, // git branch -a
-  TINIT,   // terraform init
-  TAPPLY,  // terraform apply
-  TPLAN,   // terraform plan
-  TVALID,  // terraform validate
+  // TINIT,   // terraform init
+  // TAPPLY,  // terraform apply
+  // TPLAN,   // terraform plan
+  // TVALID,  // terraform validate
   APTUP,   // apt-get update && apt-get dist-upgrade
   ANGLE,
   BRACK,
@@ -68,7 +68,7 @@ enum preonic_keycodes {
   PARAN,
   CAPSWORD,
   SNAKECASE,
-  P_WPM,    // Print my WPM data
+  // P_WPM,    // Print my WPM data
 };
 
 // // Tap Dance enum
@@ -118,9 +118,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |  -   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  |Bspc  |
+ * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
+ * | Esc  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  '   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -140,9 +140,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |  =   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Tab  |   Q  |P_WPM |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Del  |
+ * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Del  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  | COPY |  "   |
+ * |  Del |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  | COPY |  '   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   [  |   ]  |   \  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -151,8 +151,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = LAYOUT_preonic_grid(
   _______,  _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______, KC_EQL,
-  _______,  _______, P_WPM,     _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL,
-  _______,  _______, _______,   _______, _______, _______, _______, _______, _______, _______, MC_COPY, _______,
+  _______,  _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL,
+  KC_DEL,   _______, _______,   _______, _______, _______, _______, _______, _______, _______, MC_COPY, _______,
   _______,  _______, _______,   _______, _______, _______, _______, _______, KC_LBRC, KC_RBRC, KC_BSLS, _______,
   _______,  _______, _______,   _______, _______, _______, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END
 ),
@@ -214,9 +214,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_PROG] = LAYOUT_preonic_grid(
   _______, _______, _______, _______, _______, _______, _______, _______, _______, PARAN,   _______, _______,
-  _______, _______, _______, _______, _______, TINIT,   TAPPLY,  _______, _______, _______, _______, _______,
+  _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______, _______, _______,
   _______, GITADD,  GITSTAT, _______, _______, _______, GITPUSH, _______, _______, GITPULL, _______, _______,
-  _______, _______, _______, GITCOMM, TVALID,  GITBRCH, TPLAN,   _______, ANGLE,   BRACK,   CURLY,   _______,
+  _______, _______, _______, GITCOMM, _______, GITBRCH, _______, _______, ANGLE,   BRACK,   CURLY,   _______,
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 )
 
@@ -230,233 +230,233 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
 
   switch (keycode) {
-        case QWERTY:
-          if (record->event.pressed) {
-            set_single_persistent_default_layer(_QWERTY);
-          }
-          return false;
-          break;
-        case LOWER:
-          if (record->event.pressed) {
-            layer_on(_LOWER);
-            update_tri_layer(_LOWER, _RAISE, _ADJUST);
-          } else {
-            layer_off(_LOWER);
-            update_tri_layer(_LOWER, _RAISE, _ADJUST);
-          }
-          return false;
-          break;
-        case RAISE:
-          if (record->event.pressed) {
-            layer_on(_RAISE);
-            update_tri_layer(_LOWER, _RAISE, _ADJUST);
-          } else {
-            layer_off(_RAISE);
-            update_tri_layer(_LOWER, _RAISE, _ADJUST);
-          }
-          return false;
-          break;
-        case BACKLIT:
-          if (record->event.pressed) {
-            register_code(KC_RSFT);
-            #ifdef BACKLIGHT_ENABLE
-              backlight_step();
-            #endif
-            #ifdef RGBLIGHT_ENABLE
-              rgblight_step();
-            #endif
-            #ifdef __AVR__
-            writePinLow(E6);
-            #endif
-          } else {
-            unregister_code(KC_RSFT);
-            #ifdef __AVR__
-            writePinHigh(E6);
-            #endif
-          }
-          return false;
-          break;
-
-        /* Capture portion of the screen selected through the mouse (MacOS) */
-        case MC_COPY:
-          if (record->event.pressed) {
-            tap_code16(LCMD(LSFT(KC_4)));
-            return false;
-          }
-          break;
-
-        case P_EMAIL:
-          if (record->event.pressed) {
-              SEND_STRING("edieguez@ieee.org");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case W_EMAIL:
-          if (record->event.pressed) {
-              SEND_STRING("elvis@symphonie.ai");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case FDATE:
-          if (record->event.pressed) {
-            tap_code16(LALT(LCMD(LSFT(KC_D))));
-            return false;
-          }
-          break;
-
-        case GITADD:
-          if (record->event.pressed) {
-              SEND_STRING("git add ");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case GITCOMM:
-          if (record->event.pressed) {
-              SEND_STRING("git commit -m ''");
-              tap_code(KC_LEFT);  // Move cursor between quotes
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case GITPULL:
-          if (record->event.pressed) {
-              SEND_STRING("git pull\n");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case GITPUSH:
-          if (record->event.pressed) {
-              SEND_STRING("git push\n");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case GITSTAT:
-          if (record->event.pressed) {
-              SEND_STRING("git status\n");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case GITBRCH:
-          if (record->event.pressed) {
-              SEND_STRING("git branch -a\n");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case TINIT:
-          if (record->event.pressed) {
-              SEND_STRING("terraform init\n");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case TPLAN:
-          if (record->event.pressed) {
-              SEND_STRING("terraform plan\n");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case TVALID:
-          if (record->event.pressed) {
-              SEND_STRING("terraform validate\n");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case TAPPLY:
-          if (record->event.pressed) {
-              SEND_STRING("terraform apply\n");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case APTUP:
-          if (record->event.pressed) {
-              SEND_STRING("sudo apt-get update && sudo apt-get dist-upgrade\n");
-          } else {
-            // When keycode is released
-          }
-          break;
-
-         case ANGLE:
-          if (record->event.pressed) {
-              SEND_STRING("<>");
-              tap_code(KC_LEFT);  // Move cursor between quotes
-          } else {
-            // When keycode is released
-          }
-          break;
-
-         case BRACK:
-          if (record->event.pressed) {
-              SEND_STRING("[]");
-              tap_code(KC_LEFT);  // Move cursor between quotes
-          } else {
-            // When keycode is released
-          }
-          break;
-
-         case CURLY:
-          if (record->event.pressed) {
-              SEND_STRING("{}");
-              tap_code(KC_LEFT);  // Move cursor between quotes
-          } else {
-            // When keycode is released
-          }
-          break;
-
-         case PARAN:
-          if (record->event.pressed) {
-              SEND_STRING("()");
-              tap_code(KC_LEFT);  // Move cursor between quotes
-          } else {
-            // When keycode is released
-          }
-          break;
-
-        case CAPSWORD:
-          if (record->event.pressed) {
-              enable_caps_word();
-          }
-          return false;
-
-        case SNAKECASE:
-          if (record->event.pressed) {
-              enable_xcase_with(KC_UNDS);
-          }
-          return false;
-
-        case P_WPM:
-          if (record->event.pressed) {
-              char swpm[4];
-              sprintf(swpm, "%d", get_current_wpm());
-              SEND_STRING(swpm);
-          } else {
-              // When keycode is released
-          }
-          break;
-
+    case QWERTY:
+      if (record->event.pressed) {
+        set_single_persistent_default_layer(_QWERTY);
       }
-    return true;
+      return false;
+      break;
+    case LOWER:
+      if (record->event.pressed) {
+        layer_on(_LOWER);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      } else {
+        layer_off(_LOWER);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      }
+      return false;
+      break;
+    case RAISE:
+      if (record->event.pressed) {
+        layer_on(_RAISE);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      } else {
+        layer_off(_RAISE);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      }
+      return false;
+      break;
+    case BACKLIT:
+      if (record->event.pressed) {
+        register_code(KC_RSFT);
+        #ifdef BACKLIGHT_ENABLE
+          backlight_step();
+        #endif
+        #ifdef RGBLIGHT_ENABLE
+          rgblight_step();
+        #endif
+        #ifdef __AVR__
+        writePinLow(E6);
+        #endif
+      } else {
+        unregister_code(KC_RSFT);
+        #ifdef __AVR__
+        writePinHigh(E6);
+        #endif
+      }
+      return false;
+      break;
+
+    /* Capture portion of the screen selected through the mouse (MacOS) */
+    case MC_COPY:
+      if (record->event.pressed) {
+        tap_code16(LCMD(LSFT(KC_4)));
+        return false;
+      }
+      break;
+
+    case P_EMAIL:
+      if (record->event.pressed) {
+          SEND_STRING("edieguez@ieee.org");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case W_EMAIL:
+      if (record->event.pressed) {
+          SEND_STRING("elvis@symphonie.ai");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case FDATE:
+      if (record->event.pressed) {
+        tap_code16(LALT(LCMD(LSFT(KC_D))));
+        return false;
+      }
+      break;
+
+    case GITADD:
+      if (record->event.pressed) {
+          SEND_STRING("git add ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case GITCOMM:
+      if (record->event.pressed) {
+          SEND_STRING("git commit -m ''");
+          tap_code(KC_LEFT);  // Move cursor between quotes
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case GITPULL:
+      if (record->event.pressed) {
+          SEND_STRING("git pull\n");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case GITPUSH:
+      if (record->event.pressed) {
+          SEND_STRING("git push\n");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case GITSTAT:
+      if (record->event.pressed) {
+          SEND_STRING("git status\n");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case GITBRCH:
+      if (record->event.pressed) {
+          SEND_STRING("git branch -a\n");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    // case TINIT:
+    //   if (record->event.pressed) {
+    //       SEND_STRING("terraform init\n");
+    //   } else {
+    //     // When keycode is released
+    //   }
+    //   break;
+
+    // case TPLAN:
+    //   if (record->event.pressed) {
+    //       SEND_STRING("terraform plan\n");
+    //   } else {
+    //     // When keycode is released
+    //   }
+    //   break;
+
+    // case TVALID:
+    //   if (record->event.pressed) {
+    //       SEND_STRING("terraform validate\n");
+    //   } else {
+    //     // When keycode is released
+    //   }
+    //   break;
+
+    // case TAPPLY:
+    //   if (record->event.pressed) {
+    //       SEND_STRING("terraform apply\n");
+    //   } else {
+    //     // When keycode is released
+    //   }
+    //   break;
+
+    case APTUP:
+      if (record->event.pressed) {
+          SEND_STRING("sudo apt-get update && sudo apt-get dist-upgrade\n");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+     case ANGLE:
+      if (record->event.pressed) {
+          SEND_STRING("<>");
+          tap_code(KC_LEFT);  // Move cursor between quotes
+      } else {
+        // When keycode is released
+      }
+      break;
+
+     case BRACK:
+      if (record->event.pressed) {
+          SEND_STRING("[]");
+          tap_code(KC_LEFT);  // Move cursor between quotes
+      } else {
+        // When keycode is released
+      }
+      break;
+
+     case CURLY:
+      if (record->event.pressed) {
+          SEND_STRING("{}");
+          tap_code(KC_LEFT);  // Move cursor between quotes
+      } else {
+        // When keycode is released
+      }
+      break;
+
+     case PARAN:
+      if (record->event.pressed) {
+          SEND_STRING("()");
+          tap_code(KC_LEFT);  // Move cursor between quotes
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case CAPSWORD:
+      if (record->event.pressed) {
+          enable_caps_word();
+      }
+      return false;
+
+    case SNAKECASE:
+      if (record->event.pressed) {
+          enable_xcase_with(KC_UNDS);
+      }
+      return false;
+
+    // case P_WPM:
+    //   if (record->event.pressed) {
+    //       char swpm[4];
+    //       sprintf(swpm, "%d", get_current_wpm());
+    //       SEND_STRING(swpm);
+    //   } else {
+    //       // When keycode is released
+    //   }
+    //   break;
+
+    }
+  return true;
 };
 
 bool muse_mode = false;
