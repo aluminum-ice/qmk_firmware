@@ -128,14 +128,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | _SQL | Ctrl | Alt  | GUI  |_Lower|    Space    |_Raise| Left | Down |  Up  |Right |
+ * | Ctrl |  Alt | GUI  | _SQL |_Lower|    Space    |_Raise| Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_grid(
     KC_TAB,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,      KC_BSPC,
     KC_ESC,   HOME_A,  HOME_S,  HOME_D,  HOME_F,  KC_G,    KC_H,    HOME_J,  HOME_K,  HOME_L,  HOME_SCLN, KC_QUOT,
     KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,   KC_ENT ,
-    SQL,      KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,     KC_RGHT
+    KC_LCTL,  KC_LALT, KC_LGUI, SQL,     LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,     KC_RGHT
 ),
 
 /* Lower
@@ -146,14 +146,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |   -  |   =  |   [  |   ]  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | _NUM | Ctrl | Alt  | GUI  |_Lower|    Space    |_Raise| Home | PgUP | PgDN |  End |
+ * | _NUM | Ctrl |  Alt | GUI  |_Lower|    Space    |_Raise| Home | PgUP | PgDN |  End |
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = LAYOUT_planck_grid(
     KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,  KC_ASTR,  KC_LPRN, KC_RPRN, _______,
     KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS,  KC_PLUS,  KC_LCBR, KC_RCBR, KC_BSLS,
     _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_MINS,  KC_EQL,   KC_LBRC, KC_RBRC, _______,
-    NUM,     _______, _______, _______, _______, _______, _______, _______,  KC_HOME,  KC_PGDN, KC_PGUP, KC_END
+    NUM,     KC_LCTL, KC_LALT, KC_LGUI, _______, _______, _______, _______,  KC_HOME,  KC_PGDN, KC_PGUP, KC_END
 ),
 
 /* Raise
@@ -164,14 +164,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |  <>  |  {}  |  ()  |  []  |      |WADDR | NAME |STATUS|BRANCH| PULL |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | _NUM | Ctrl | Alt  | GUI  |_Lower|    Space    |_Raise| Next | Vol- | Vol+ | Play |
+ * | _NUM | Ctrl |  Alt | GUI  |_Lower|    Space    |_Raise| Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = LAYOUT_planck_grid(
     KC_GRV,   KC_1,    KC_2,      KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
     CAPSWORD, XXXXXXX, SNAKECASE, XXXXXXX, XXXXXXX, APTUP,   W_EMAIL, P_EMAIL, GITADD,  GITCOMM, GITPUSH, KC_PIPE,
     _______,  ANGLE,   CURLY,     PARAN,   BRACK,   XXXXXXX, W_ADDR,  NAME,    GITSTAT, GITBRCH, GITPULL, _______,
-    _______,  _______, _______,   _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
+    NUM,      KC_LCTL, KC_LALT,   KC_LGUI, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
 /* SQL
@@ -182,7 +182,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|      |      |      |      |      |      |      |TMPTBL|DRPTBL|UPDATE| AND  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | _SQL | Ctrl | Alt  | GUI  |      |    Space    |      |  ()  |   =  | SET  |  OR  |
+ * |      |      |      | _SQL |      |    Space    |      |  ()  |   =  | SET  |  OR  |
  * `-----------------------------------------------------------------------------------'
  */
 
@@ -190,7 +190,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, SELECT, FROM,   LFJOIN, SQLON,
     KC_DEL,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WHERE,  GRP_BY, INJOIN, SQLAS,
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TMPTBL, DRPTBL, UPDATE, SQLAND,
-    _______, _______, _______, _______, XXXXXXX, _______, _______, XXXXXXX, PARAN,  KC_EQL, SQLSET, SQLOR
+    XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, XXXXXXX, PARAN,  KC_EQL, SQLSET, SQLOR
 ),
 
 /* NUM
@@ -258,8 +258,86 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #endif
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+
+    state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+
+    switch (get_highest_layer(state)) {
+    case _RAISE:
+        rgblight_setrgb (RGB_RED);
+        break;
+    case _LOWER:
+        rgblight_setrgb (RGB_BLUE);
+        break;
+    case _SQL:
+        rgblight_setrgb (RGB_YELLOW);
+        break;
+    case _NUM:
+        rgblight_setrgb (RGB_GREEN);
+        break;
+    case _PLOVER:
+        rgblight_setrgb (0x00,  0xFF, 0x00);
+        break;
+    case _ADJUST:
+        rgblight_setrgb (RGB_PURPLE);
+        break;
+    default: //  for any other layers, or the default layer
+        rgblight_setrgb (RGB_CYAN);
+        break;
+    }
+
+  return state;
 }
+
+
+
+
+// // Light LEDs 6 to 9 and 12 to 15 red when caps lock is active. Hard to ignore!
+// const rgblight_segment_t PROGMEM my_capslock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+//     {6, 4, HSV_RED},       // Light 4 LEDs, starting with LED 6
+//     {12, 4, HSV_RED}       // Light 4 LEDs, starting with LED 12
+// );
+// // Light LEDs 9 & 10 in cyan when keyboard layer 1 is active
+// const rgblight_segment_t PROGMEM my_layer1_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+//     {9, 2, HSV_CYAN}
+// );
+// // Light LEDs 11 & 12 in purple when keyboard layer 2 is active
+// const rgblight_segment_t PROGMEM my_layer2_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+//     {11, 2, HSV_PURPLE}
+// );
+// // Light LEDs 13 & 14 in green when keyboard layer 3 is active
+// const rgblight_segment_t PROGMEM my_layer3_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+//     {13, 2, HSV_GREEN}
+// );
+
+// // Now define the array of layers. Later layers take precedence
+// const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
+//     my_capslock_layer,
+//     my_layer1_layer,    // Overrides caps lock layer
+//     my_layer2_layer,    // Overrides other layers
+//     my_layer3_layer     // Overrides other layers
+// );
+
+// void keyboard_post_init_user(void) {
+//     // Enable the LED layers
+//     rgblight_layers = my_rgb_layers;
+// }
+
+// bool led_update_user(led_t led_state) {
+//     rgblight_set_layer_state(0, led_state.caps_lock);
+//     return true;
+// }
+
+// layer_state_t default_layer_state_set_user(layer_state_t state) {
+//     rgblight_set_layer_state(1, layer_state_cmp(state, _RAISE));
+//     return state;
+// }
+
+// layer_state_t layer_state_set_user(layer_state_t state) {
+//     rgblight_set_layer_state(2, layer_state_cmp(state, _FN));
+//     rgblight_set_layer_state(3, layer_state_cmp(state, _LOWER));
+//     return state;
+// }
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   // Process case modes
