@@ -38,18 +38,24 @@ enum preonic_layers {
   _QWERTY,
   _LOWER,
   _RAISE,
-  _ADJUST,
-  _PROG
+  _SQL,
+  _NUM,
+  _ADJUST
 };
+
+#define LOWER   MO(_LOWER)
+#define RAISE   MO(_RAISE)
+#define SQL     MO(_SQL)
+#define NUM     TG(_NUM)
 
 enum preonic_keycodes {
   QWERTY = SAFE_RANGE,
-  LOWER,
-  RAISE,
   BACKLIT,
   MC_COPY,
+  NAME,    // Elvis Dieguez
   P_EMAIL, // edieguez@ieee.org
   W_EMAIL, // elvis@usymphonie.ai
+  W_ADDR,  // 160 NW Gilman Blvd, Suite #225, Issaquah, WA 98027
   FDATE,   // Dates
   GITPULL, // git pull
   GITPUSH, // git push
@@ -57,18 +63,27 @@ enum preonic_keycodes {
   GITCOMM, // git commit -m ''
   GITSTAT, // git status
   GITBRCH, // git branch -a
-  // TINIT,   // terraform init
-  // TAPPLY,  // terraform apply
-  // TPLAN,   // terraform plan
-  // TVALID,  // terraform validate
   APTUP,   // apt-get update && apt-get dist-upgrade
   ANGLE,
   BRACK,
   CURLY,
   PARAN,
+  SELECT,
+  FROM,
+  WHERE,
+  GRP_BY,
+  LFJOIN,
+  INJOIN,
+  TMPTBL,
+  DRPTBL,
+  UPDATE,
+  SQLSET,
+  SQLON,
+  SQLAS,
+  SQLAND,
+  SQLOR,
   CAPSWORD,
   SNAKECASE,
-  // P_WPM,    // Print my WPM data
 };
 
 // // Tap Dance enum
@@ -124,104 +139,160 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Prog | Ctrl | Alt  | GUI  |Lower |    Space    |Raise | Left | Down |  Up  |Right |
+ * | Ctrl |  Alt | GUI  | _SQL |_Lower|    Space    |_Raise| Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_preonic_grid(
-  KC_GRV,            KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,      KC_MINS,
-  LT(_PROG,KC_TAB),  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,      KC_BSPC,
-  KC_ESC,            HOME_A,  HOME_S,  HOME_D,  HOME_F,  KC_G,    KC_H,    HOME_J,  HOME_K,  HOME_L,  HOME_SCLN, KC_QUOT,
-  KC_LSFT,           KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,   KC_ENT,
-  MO(_PROG),         KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,     KC_RGHT
+  KC_GRV,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,      KC_MINS,
+  KC_TAB,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,      KC_BSPC,
+  KC_ESC,   HOME_A,  HOME_S,  HOME_D,  HOME_F,  KC_G,    KC_H,    HOME_J,  HOME_K,  HOME_L,  HOME_SCLN, KC_QUOT,
+  KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,   KC_ENT,
+  KC_LCTL,  KC_LALT, KC_LGUI, SQL,     LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,     KC_RGHT
 ),
 
 
 /* Lower
  * ,-----------------------------------------------------------------------------------.
  * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |  =   |
+ * |-----------------------------------------------------------------------------------|
+ * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Bksp |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Del  |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |  Del |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  | COPY |  '   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   [  |   ]  |   \  |Enter |
+ * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |   {  |   }  |  \   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Home | PgUP | PgDN |  End |
+ * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |   -  |   =  |   [  |   ]  |Enter |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | _NUM | Ctrl |  Alt | GUI  |_Lower|    Space    |_Raise| Home | PgUP | PgDN |  End |
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = LAYOUT_preonic_grid(
-  _______,  _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______, KC_EQL,
-  _______,  _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL,
-  KC_DEL,   _______, _______,   _______, _______, _______, _______, _______, _______, _______, MC_COPY, _______,
-  _______,  _______, _______,   _______, _______, _______, _______, _______, KC_LBRC, KC_RBRC, KC_BSLS, _______,
-  _______,  _______, _______,   _______, _______, _______, _______, _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END
+    _______,  _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______, KC_EQL,
+    KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,  KC_ASTR,  KC_LPRN, KC_RPRN,  _______,
+    KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS,  KC_PLUS,  KC_LCBR, KC_RCBR,  KC_BSLS,
+    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_MINS,  KC_EQL,   KC_LBRC, KC_RBRC,  _______,
+    NUM,     KC_LCTL, KC_LALT, KC_LGUI, _______, _______, _______, _______,  KC_HOME,  KC_PGDN, KC_PGUP,  KC_END
 ),
+
 
 /* Raise
  * ,-----------------------------------------------------------------------------------.
  * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |
+ * |-----------------------------------------------------------------------------------|
+ * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Tab  |   Q  |WEMAIL|   E  |   R  |   T  |   Y  |UPDATE|   I  |   O  |PEMAIL| Del  |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | CAPS |   A  |SNAKE |FDATE |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |  C   |   V  |   B  |   N  |   M  |   [  |   ]  |   \  |      |
+ * | CAPS |      |SNAKE |      |      |APTUP |WEMAIL|PEMAIL|  ADD |COMMIT| PUSH |  |   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
+ * |      |  <>  |  {}  |  ()  |  []  |      |WADDR | NAME |STATUS|BRANCH| PULL |Enter |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | _NUM | Ctrl |  Alt | GUI  |_Lower|    Space    |_Raise| Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = LAYOUT_preonic_grid(
-  KC_F1,    KC_F2,   KC_F3,     KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
-  _______,  _______, W_EMAIL,   _______, _______, _______, _______, APTUP,   _______, _______, P_EMAIL, KC_DEL,
-  CAPSWORD, _______, SNAKECASE, FDATE,   _______, _______, _______, _______, _______, _______, _______, _______,
-  _______,  _______, _______,   _______, _______, _______, _______, _______, KC_LBRC, KC_RBRC, KC_BSLS, _______,
-  _______,  _______, _______,   _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
+    KC_F1,    KC_F2,   KC_F3,     KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
+    KC_GRV,   KC_1,    KC_2,      KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
+    CAPSWORD, XXXXXXX, SNAKECASE, XXXXXXX, XXXXXXX, APTUP,   W_EMAIL, P_EMAIL, GITADD,  GITCOMM, GITPUSH, KC_PIPE,
+    _______,  ANGLE,   CURLY,     PARAN,   BRACK,   XXXXXXX, W_ADDR,  NAME,    GITSTAT, GITBRCH, GITPULL, _______,
+    NUM,      KC_LCTL, KC_LALT,   KC_LGUI, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
-/* Adjust (Lower + Raise)
+
+/* SQL
  * ,-----------------------------------------------------------------------------------.
- * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      | Reset| Debug|      |      |      |      |      |      |      |      |Brite |
+ * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |  -   |
+ * |-----------------------------------------------------------------------------------|
+ * | Tab  |      |      |      |      |      |      |      |SELECT| FROM |LFJOIN|  ON  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |Aud cy|Aud on|AudOff|AGnorm|AGswap|      |      |      |      |      |
+ * | Del  |      |      |      |      |      |      |      |WHERE |GRP BY|INJOIN|  AS  |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |Voice-|Voice+|Mus on|MusOff|MidiOn|MidOff|      |      |      |      |      |
+ * | Shift|      |      |      |      |      |      |      |TMPTBL|DRPTBL|UPDATE| AND  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |  CLR |      |      |      |      |             |      |      |      |      |      |
+ * |      |      |      | _SQL |      |    Space    |      |  ()  |   =  | SET  |  OR  |
+ * `-----------------------------------------------------------------------------------'
+ */
+
+[_SQL] = LAYOUT_preonic_grid(
+    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,  KC_0,   KC_MINS,
+    KC_TAB,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, SELECT, FROM,   LFJOIN, SQLON,
+    KC_DEL,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WHERE,  GRP_BY, INJOIN, SQLAS,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TMPTBL, DRPTBL, UPDATE, SQLAND,
+    XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, XXXXXXX, PARAN,  KC_EQL, SQLSET, SQLOR
+),
+
+/* NUM
+ * ,-----------------------------------------------------------------------------------.
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * |-----------------------------------------------------------------------------------|
+ * | Tab  |      |      |      |      |      |      |  1   |  2   |  3   |  +   | Bksp |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * | Del  |      |      |      |      |      |      |  4   |  5   |  6   |  -   |      |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * | Shift|      |      |      |      |      |      |  7   |  8   |  9   |  *   |Enter |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |_QWRTY| Ctrl | Alt  | GUI  |      |    Space    |  0   |  .   |  =   |  /   |      |
+ * `-----------------------------------------------------------------------------------'
+ */
+
+[_NUM] = LAYOUT_preonic_grid(
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+    KC_TAB,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_1,    KC_2,    KC_3,    KC_PLUS, KC_BSPC,
+    KC_DEL,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_4,    KC_5,    KC_6,    KC_MINS, XXXXXXX,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_7,    KC_8,    KC_9,    KC_ASTR, KC_ENT,
+    NUM,     _______, _______, _______, XXXXXXX, _______, _______, KC_0,    KC_DOT,  KC_EQL,  KC_SLSH, XXXXXXX
+),
+
+
+/* Adjust (Lower + Raise)
+ *                      v------------------------RGB CONTROL--------------------v
+ * ,-----------------------------------------------------------------------------------.
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      | Reset|Debug | RGB  |RGBMOD| HUE+ | HUE- | SAT+ | SAT- |BRGTH+|BRGTH-|  Del |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |MUSmod|Aud on|Audoff|AGnorm|AGswap|Qwerty|      |      |Plover|      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|      |      |      |      |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | CLR  |      |      |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_preonic_grid(
-  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
-  _______, QK_BOOT, DB_TOGG, _______, _______, _______, _______, _______, _______, _______, _______, RGB_TOG,
-  _______, _______, MU_NEXT, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, _______, _______, _______, _______, _______,
-  _______, AU_PREV, AU_NEXT, MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______,
-  EE_CLR,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
-),
-
-/* Programming
- * ,-----------------------------------------------------------------------------------.
- * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |  -   |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   E  |   R  | INIT |APPLY |   U  |   I  |   O  |   P  |Bspc  |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc  |  ADD |STATUS|   D  |   F  |   G  | PUSH |   J  |   K  | PULL |   ;  |  "   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |COMMIT|VALID |BRANCH| PLAN |   M  |  <>  |  []  |  {}  |Enter |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      | Ctrl | Alt  | GUI  |Lower |    Space    |Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------------------------------------------------'
- */
-[_PROG] = LAYOUT_preonic_grid(
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, PARAN,   _______, _______,
-  _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______, _______, _______,
-  _______, GITADD,  GITSTAT, _______, _______, _______, GITPUSH, _______, _______, GITPULL, _______, _______,
-  _______, _______, _______, GITCOMM, _______, GITBRCH, _______, _______, ANGLE,   BRACK,   CURLY,   _______,
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+    _______, QK_BOOT, DB_TOGG, RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, KC_DEL ,
+    _______, _______, MU_NEXT, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______, _______, _______, _______,
+    _______, AU_PREV, AU_NEXT, MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______,
+    EE_CLR,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 )
 
-
 };
+
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+
+    state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+
+    switch (get_highest_layer(state)) {
+    case _RAISE:
+        rgblight_setrgb (RGB_RED);
+        break;
+    case _LOWER:
+        rgblight_setrgb (RGB_BLUE);
+        break;
+    case _SQL:
+        rgblight_setrgb (RGB_YELLOW);
+        break;
+    case _NUM:
+        rgblight_setrgb (RGB_GREEN);
+        break;
+    case _ADJUST:
+        rgblight_setrgb (RGB_PURPLE);
+        break;
+    default: //  for any other layers, or the default layer
+        rgblight_setrgb (RGB_CYAN);
+        break;
+    }
+
+  return state;
+}
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   // Process case modes
@@ -236,26 +307,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case LOWER:
-      if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
+    // case LOWER:
+    //   if (record->event.pressed) {
+    //     layer_on(_LOWER);
+    //     update_tri_layer(_LOWER, _RAISE, _ADJUST);
+    //   } else {
+    //     layer_off(_LOWER);
+    //     update_tri_layer(_LOWER, _RAISE, _ADJUST);
+    //   }
+    //   return false;
+    //   break;
+    // case RAISE:
+    //   if (record->event.pressed) {
+    //     layer_on(_RAISE);
+    //     update_tri_layer(_LOWER, _RAISE, _ADJUST);
+    //   } else {
+    //     layer_off(_RAISE);
+    //     update_tri_layer(_LOWER, _RAISE, _ADJUST);
+    //   }
+    //   return false;
+    //   break;
     case BACKLIT:
       if (record->event.pressed) {
         register_code(KC_RSFT);
@@ -285,6 +356,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 
+    case NAME:
+      if (record->event.pressed) {
+          SEND_STRING("Elvis Dieguez");
+      } else {
+        // When keycode is released
+      }
+      break;
+
     case P_EMAIL:
       if (record->event.pressed) {
           SEND_STRING("edieguez@ieee.org");
@@ -296,6 +375,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case W_EMAIL:
       if (record->event.pressed) {
           SEND_STRING("elvis@symphonie.ai");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case W_ADDR:
+      if (record->event.pressed) {
+          SEND_STRING("160 NW Gilman Blvd, Suite #225, Issaquah, WA 98027");
       } else {
         // When keycode is released
       }
@@ -357,38 +444,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 
-    // case TINIT:
-    //   if (record->event.pressed) {
-    //       SEND_STRING("terraform init\n");
-    //   } else {
-    //     // When keycode is released
-    //   }
-    //   break;
-
-    // case TPLAN:
-    //   if (record->event.pressed) {
-    //       SEND_STRING("terraform plan\n");
-    //   } else {
-    //     // When keycode is released
-    //   }
-    //   break;
-
-    // case TVALID:
-    //   if (record->event.pressed) {
-    //       SEND_STRING("terraform validate\n");
-    //   } else {
-    //     // When keycode is released
-    //   }
-    //   break;
-
-    // case TAPPLY:
-    //   if (record->event.pressed) {
-    //       SEND_STRING("terraform apply\n");
-    //   } else {
-    //     // When keycode is released
-    //   }
-    //   break;
-
     case APTUP:
       if (record->event.pressed) {
           SEND_STRING("sudo apt-get update && sudo apt-get dist-upgrade\n");
@@ -444,18 +499,121 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           enable_xcase_with(KC_UNDS);
       }
       return false;
+      break;
 
-    // case P_WPM:
-    //   if (record->event.pressed) {
-    //       char swpm[4];
-    //       sprintf(swpm, "%d", get_current_wpm());
-    //       SEND_STRING(swpm);
-    //   } else {
-    //       // When keycode is released
-    //   }
-    //   break;
+    case SELECT:
+      if (record->event.pressed) {
+          SEND_STRING("SELECT ");
+      } else {
+        // When keycode is released
+      }
+      break;
 
-    }
+    case FROM:
+      if (record->event.pressed) {
+          SEND_STRING("FROM ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case WHERE:
+      if (record->event.pressed) {
+          SEND_STRING("WHERE ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case GRP_BY:
+      if (record->event.pressed) {
+          SEND_STRING("GROUP BY ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case LFJOIN:
+      if (record->event.pressed) {
+          SEND_STRING("LEFT JOIN ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case INJOIN:
+      if (record->event.pressed) {
+          SEND_STRING("INNER JOIN ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case UPDATE:
+      if (record->event.pressed) {
+          SEND_STRING("UPDATE ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLSET:
+      if (record->event.pressed) {
+          SEND_STRING("SET ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLON:
+      if (record->event.pressed) {
+          SEND_STRING("ON ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLAS:
+      if (record->event.pressed) {
+          SEND_STRING("AS ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLAND:
+      if (record->event.pressed) {
+          SEND_STRING("AND ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLOR:
+      if (record->event.pressed) {
+          SEND_STRING("OR ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case TMPTBL:
+      if (record->event.pressed) {
+          SEND_STRING("CREATE TEMPORARY TABLE IF NOT EXISTS ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case DRPTBL:
+      if (record->event.pressed) {
+          SEND_STRING("DROP TABLE IF EXISTS ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+  }
   return true;
 };
 
