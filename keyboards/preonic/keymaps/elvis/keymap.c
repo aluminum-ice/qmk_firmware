@@ -52,11 +52,9 @@ enum preonic_keycodes {
   QWERTY = SAFE_RANGE,
   BACKLIT,
   MC_COPY,
-  NAME,    // Elvis Dieguez
-  P_EMAIL, // edieguez@ieee.org
-  W_EMAIL, // elvis@usymphonie.ai
-  W_ADDR,  // 160 NW Gilman Blvd, Suite #225, Issaquah, WA 98027
   FDATE,   // Dates
+  GITCLN,  // git clone
+  GITCHK,  // git checkout
   GITPULL, // git pull
   GITPUSH, // git push
   GITADD,  // git add 
@@ -179,9 +177,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |-----------------------------------------------------------------------------------|
  * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | CAPS |      |SNAKE |      |      |APTUP |WEMAIL|PEMAIL|  ADD |COMMIT| PUSH |  |   |
+ * | CAPS |      |SNAKE |      |      |APTUP |      |      |  ADD |COMMIT| PUSH |  |   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |  <>  |  {}  |  ()  |  []  |      |WADDR | NAME |STATUS|BRANCH| PULL |Enter |
+ * |      |  <>  |  {}  |  ()  |  []  |      |      |      |STATUS|BRANCH| PULL |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | _NUM | Ctrl |  Alt | GUI  |_Lower|    Space    |_Raise| Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
@@ -189,8 +187,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_RAISE] = LAYOUT_preonic_grid(
     KC_F1,    KC_F2,   KC_F3,     KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
     KC_GRV,   KC_1,    KC_2,      KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
-    CAPSWORD, XXXXXXX, SNAKECASE, XXXXXXX, XXXXXXX, APTUP,   W_EMAIL, P_EMAIL, GITADD,  GITCOMM, GITPUSH, KC_PIPE,
-    _______,  ANGLE,   CURLY,     PARAN,   BRACK,   XXXXXXX, W_ADDR,  NAME,    GITSTAT, GITBRCH, GITPULL, _______,
+    CAPSWORD, XXXXXXX, SNAKECASE, XXXXXXX, XXXXXXX, APTUP,   XXXXXXX, XXXXXXX, GITADD,  GITCOMM, GITPUSH, KC_PIPE,
+    _______,  ANGLE,   CURLY,     PARAN,   BRACK,   XXXXXXX, XXXXXXX, XXXXXXX, GITSTAT, GITBRCH, GITPULL, _______,
     NUM,      KC_LCTL, KC_LALT,   KC_LGUI, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
@@ -356,42 +354,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 
-    case NAME:
-      if (record->event.pressed) {
-          SEND_STRING("Elvis Dieguez");
-      } else {
-        // When keycode is released
-      }
-      break;
-
-    case P_EMAIL:
-      if (record->event.pressed) {
-          SEND_STRING("edieguez@ieee.org");
-      } else {
-        // When keycode is released
-      }
-      break;
-
-    case W_EMAIL:
-      if (record->event.pressed) {
-          SEND_STRING("elvis@symphonie.ai");
-      } else {
-        // When keycode is released
-      }
-      break;
-
-    case W_ADDR:
-      if (record->event.pressed) {
-          SEND_STRING("160 NW Gilman Blvd, Suite #225, Issaquah, WA 98027");
-      } else {
-        // When keycode is released
-      }
-      break;
-
     case FDATE:
       if (record->event.pressed) {
         tap_code16(LALT(LCMD(LSFT(KC_D))));
         return false;
+      }
+      break;
+
+    case GITCLN:
+      if (record->event.pressed) {
+          SEND_STRING("git clone ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case GITCHK:
+      if (record->event.pressed) {
+          SEND_STRING("git checkout ");
+      } else {
+        // When keycode is released
       }
       break;
 
