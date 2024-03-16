@@ -52,9 +52,6 @@ enum my_keycodes {
   LED_MINS,
   LED_EQL,
   MC_COPY,
-  P_EMAIL, // edieguez@ieee.org
-  W_EMAIL, // elvis@unybrands.com
-  APPVL,   // Approved, Elvis Dieguez, Date
   FDATE,   // Dates
   CAPSWORD,
   SNAKECASE,
@@ -158,8 +155,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [3] = LAYOUT(
     _______,  KC_F1,   KC_F2,     KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______,          _______,
     _______,  _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
-    _______,  _______, W_EMAIL,   _______, _______, _______, _______, _______, _______, _______, P_EMAIL, _______, _______, _______,          _______,
-    CAPSWORD, APPVL,   SNAKECASE, FDATE,   _______, _______, _______, _______, _______, _______, MC_COPY, _______,          _______,          _______,
+    _______,  _______, _______,   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
+    CAPSWORD, _______, SNAKECASE, FDATE,   _______, _______, _______, _______, _______, _______, MC_COPY, _______,          _______,          _______,
     _______,           _______,   _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, _______,
     _______,  _______, _______,                              _______,                            _______, _______, _______, _______, _______, _______
   ),
@@ -492,32 +489,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       //   }
       //   break;
 
-      case P_EMAIL:
-        if (record->event.pressed) {
-            SEND_STRING("edieguez@ieee.org"); /* SENSITIVE INFO */
-        } else {
-          // When keycode is released
-        }
-        break;
-
-      case W_EMAIL:
-        if (record->event.pressed) {
-            SEND_STRING("elvis@unybrands.com"); /* SENSITIVE INFO */
-        } else {
-          // When keycode is released
-        }
-        break;
-
       case FDATE:
         if (record->event.pressed) {
           tap_code16(LALT(LCMD(LSFT(KC_D))));
-          return false;
-        }
-        break;
-
-      case APPVL:
-        if (record->event.pressed) {
-          tap_code16(LALT(LCMD(LSFT(KC_A))));
           return false;
         }
         break;
