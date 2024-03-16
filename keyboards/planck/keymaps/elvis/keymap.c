@@ -47,6 +47,7 @@ enum planck_layers {
 #define RAISE   MO(_RAISE)
 #define SQL     MO(_SQL)
 #define NUM     TG(_NUM)
+#define SPACEFN LT(_NUM, KC_SPC)
 
 enum planck_keycodes {
 
@@ -54,11 +55,9 @@ enum planck_keycodes {
   PLOVER,
   EXT_PLV,
   MC_COPY,
-  NAME,    // Elvis Dieguez
-  P_EMAIL, // edieguez@ieee.org
-  W_EMAIL, // elvis@usymphonie.ai
-  W_ADDR,  // 160 NW Gilman Blvd, Suite #225, Issaquah, WA 98027
   FDATE,   // Dates
+  GITCLN,  // git clone
+  GITCHK,  // git checkout
   GITPULL, // git pull
   GITPUSH, // git push
   GITADD,  // git add 
@@ -128,49 +127,49 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Ctrl |  Alt | GUI  | _SQL |_Lower|    Space    |_Raise| Left | Down |  Up  |Right |
+ * | Ctrl |  Alt | GUI  | _SQL |_Lower|   SpaceFN   |_Raise| Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_grid(
     KC_TAB,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,      KC_BSPC,
     KC_ESC,   HOME_A,  HOME_S,  HOME_D,  HOME_F,  KC_G,    KC_H,    HOME_J,  HOME_K,  HOME_L,  HOME_SCLN, KC_QUOT,
     KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,   KC_ENT ,
-    KC_LCTL,  KC_LALT, KC_LGUI, SQL,     LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,     KC_RGHT
-),
-
-/* Lower
- * ,-----------------------------------------------------------------------------------.
- * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Bksp |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |   {  |   }  |  \   |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |   -  |   =  |   [  |   ]  |Enter |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | _NUM | Ctrl |  Alt | GUI  |_Lower|    Space    |_Raise| Home | PgUP | PgDN |  End |
- * `-----------------------------------------------------------------------------------'
- */
-[_LOWER] = LAYOUT_planck_grid(
-    KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,  KC_ASTR,  KC_LPRN, KC_RPRN, _______,
-    KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS,  KC_PLUS,  KC_LCBR, KC_RCBR, KC_BSLS,
-    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_MINS,  KC_EQL,   KC_LBRC, KC_RBRC, _______,
-    NUM,     KC_LCTL, KC_LALT, KC_LGUI, _______, _______, _______, _______,  KC_HOME,  KC_PGDN, KC_PGUP, KC_END
+    KC_LCTL,  KC_LALT, KC_LGUI, SQL,     LOWER,   SPACEFN, SPACEFN, RAISE,   KC_LEFT, KC_DOWN, KC_UP,     KC_RGHT
 ),
 
 /* Raise
  * ,-----------------------------------------------------------------------------------.
- * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
+ * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Bksp |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | CAPS |      |SNAKE |      |      |APTUP |WEMAIL|PEMAIL|  ADD |COMMIT| PUSH |  |   |
+ * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |   {  |   }  |  |   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |  <>  |  {}  |  ()  |  []  |      |WADDR | NAME |STATUS|BRANCH| PULL |Enter |
+ * | Shift|  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |   -  |   =  |   [  |   ]  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | _NUM | Ctrl |  Alt | GUI  |_Lower|    Space    |_Raise| Next | Vol- | Vol+ | Play |
+ * | _NUM | Ctrl |  Alt | GUI  |_Lower|   SpaceFN   |_Raise| Home | PgUP | PgDN |  End |
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = LAYOUT_planck_grid(
+    KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,  KC_ASTR,  KC_LPRN, KC_RPRN, _______,
+    KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS,  KC_PLUS,  KC_LCBR, KC_RCBR, KC_PIPE,
+    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_MINS,  KC_EQL,   KC_LBRC, KC_RBRC, _______,
+    NUM,     KC_LCTL, KC_LALT, KC_LGUI, _______, _______, _______, _______,  KC_HOME,  KC_PGDN, KC_PGUP, KC_END
+),
+
+/* Lower
+ * ,-----------------------------------------------------------------------------------.
+ * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | CAPS |      |SNAKE |      |      |APTUP |      | CLONE|  ADD |COMMIT| PUSH |  \   |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | Shift|  <>  |  {}  |  ()  |  []  |      |      |CHKOUT|STATUS|BRANCH| PULL |Enter |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | _NUM | Ctrl |  Alt | GUI  |_Lower|   SpaceFN   |_Raise| Next | Vol- | Vol+ | Play |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_LOWER] = LAYOUT_planck_grid(
     KC_GRV,   KC_1,    KC_2,      KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
-    CAPSWORD, XXXXXXX, SNAKECASE, XXXXXXX, XXXXXXX, APTUP,   W_EMAIL, P_EMAIL, GITADD,  GITCOMM, GITPUSH, KC_PIPE,
-    _______,  ANGLE,   CURLY,     PARAN,   BRACK,   XXXXXXX, W_ADDR,  NAME,    GITSTAT, GITBRCH, GITPULL, _______,
+    CAPSWORD, XXXXXXX, SNAKECASE, XXXXXXX, XXXXXXX, APTUP,   XXXXXXX, GITCLN,  GITADD,  GITCOMM, GITPUSH, KC_BSLS,
+    _______,  ANGLE,   CURLY,     PARAN,   BRACK,   XXXXXXX, XXXXXXX, GITCHK,  GITSTAT, GITBRCH, GITPULL, _______,
     NUM,      KC_LCTL, KC_LALT,   KC_LGUI, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
@@ -182,7 +181,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|      |      |      |      |      |      |      |TMPTBL|DRPTBL|UPDATE| AND  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      | _SQL |      |    Space    |      |  ()  |   =  | SET  |  OR  |
+ * |      |      |      | _SQL |      |   SpaceFN   |      |  ()  |   =  | SET  |  OR  |
  * `-----------------------------------------------------------------------------------'
  */
 
@@ -199,16 +198,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * | Del  |      |      |      |      |      |      |  4   |  5   |  6   |  -   |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|      |      |      |      |      |      |  7   |  8   |  9   |  *   |Enter |
+ * | Shift|  <>  |  {}  |  ()  |  []  |      |      |  7   |  8   |  9   |  *   |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |_QWRTY| Ctrl | Alt  | GUI  |      |    Space    |  0   |  .   |  =   |  /   |      |
+ * |_QWRTY| Ctrl | Alt  | GUI  |      |   SpaceFN   |  0   |  .   |  =   |  /   |      |
  * `-----------------------------------------------------------------------------------'
  */
 
 [_NUM] = LAYOUT_planck_grid(
     KC_TAB,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_1, KC_2,   KC_3,   KC_PLUS, KC_BSPC,
     KC_DEL,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_4, KC_5,   KC_6,   KC_MINS, XXXXXXX,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_7, KC_8,   KC_9,   KC_ASTR, KC_ENT,
+    _______, ANGLE,   CURLY,   PARAN,   BRACK,   XXXXXXX, XXXXXXX, KC_7, KC_8,   KC_9,   KC_ASTR, KC_ENT,
     NUM,     _______, _______, _______, XXXXXXX, _______, _______, KC_0, KC_DOT, KC_EQL, KC_SLSH, XXXXXXX
 ),
 
@@ -391,42 +390,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 
-    case NAME:
-      if (record->event.pressed) {
-          SEND_STRING("Elvis Dieguez");
-      } else {
-        // When keycode is released
-      }
-      break;
-
-    case P_EMAIL:
-      if (record->event.pressed) {
-          SEND_STRING("edieguez@ieee.org");
-      } else {
-        // When keycode is released
-      }
-      break;
-
-    case W_EMAIL:
-      if (record->event.pressed) {
-          SEND_STRING("elvis@symphonie.ai");
-      } else {
-        // When keycode is released
-      }
-      break;
-
-    case W_ADDR:
-      if (record->event.pressed) {
-          SEND_STRING("160 NW Gilman Blvd, Suite #225, Issaquah, WA 98027");
-      } else {
-        // When keycode is released
-      }
-      break;
-
     case FDATE:
       if (record->event.pressed) {
         tap_code16(LALT(LCMD(LSFT(KC_D))));
         return false;
+      }
+      break;
+
+    case GITCLN:
+      if (record->event.pressed) {
+          SEND_STRING("git clone ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case GITCHK:
+      if (record->event.pressed) {
+          SEND_STRING("git checkout ");
+      } else {
+        // When keycode is released
       }
       break;
 
