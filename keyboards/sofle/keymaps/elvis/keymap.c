@@ -90,8 +90,6 @@ enum custom_keycodes {
     KC_RAISE,
     KC_ADJUST,
     MC_COPY,
-    P_EMAIL, // edieguez@ieee.org
-    W_EMAIL, // elvis@unybrands.com
     CAPSWORD,
     SNAKECASE,
     // P_WPM,    // Print my WPM data
@@ -201,7 +199,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,------------------------------------------------.                    ,---------------------------------------------------.
    KC_F1,  KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                     KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
   //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
-  _______, _______, W_EMAIL, _______, _______, _______,                   _______, _______, _______, _______, P_EMAIL, _______,
+  _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
   //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
   _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
   //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
@@ -520,22 +518,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
               tap_code16(LCMD(LSFT(KC_4)));
               return false;
-            }
-            break;
-
-        case P_EMAIL:
-            if (record->event.pressed) {
-                SEND_STRING("edieguez@ieee.org");
-            } else {
-              // When keycode is released
-            }
-            break;
-
-        case W_EMAIL:
-            if (record->event.pressed) {
-                SEND_STRING("elvis@unybrands.com");
-            } else {
-              // When keycode is released
             }
             break;
 
