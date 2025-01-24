@@ -47,7 +47,7 @@ enum planck_layers {
 #define RAISE   MO(_RAISE)
 #define SQL     MO(_SQL)
 #define NUM     TG(_NUM)
-#define SPACEFN LT(_NUM, KC_SPC)
+#define SPACEFN LT(_SQL, KC_SPC)
 
 enum planck_keycodes {
 
@@ -72,8 +72,9 @@ enum planck_keycodes {
   PARAN,
   SELECT,
   FROM,
-  WHERE,
+  SQLWHR,
   GRP_BY,
+  ORD_BY,
   LFJOIN,
   INJOIN,
   TMPTBL,
@@ -81,9 +82,17 @@ enum planck_keycodes {
   UPDATE,
   SQLSET,
   SQLON,
+  SQLIN,
   SQLAS,
   SQLAND,
   SQLOR,
+  SQLCASE,
+  SQLWHEN,
+  SQLTHEN,
+  SQLELSE,
+  SQLEND,
+  SQLTUP,
+  SQLTLR,
   CAPSWORD,
   SNAKECASE,
 };
@@ -156,7 +165,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     NUM,     KC_LCTL, KC_LALT, KC_LGUI, _______, _______, _______, _______,  KC_HOME,  KC_PGDN, KC_PGUP, KC_END
 ),
 
-
 /* Raise
  * ,-----------------------------------------------------------------------------------.
  * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
@@ -177,21 +185,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* SQL
  * ,-----------------------------------------------------------------------------------.
- * | Tab  |      |      |      |      |      |      |      |SELECT| FROM |LFJOIN|  ON  |
+ * | Tab  |TMPTBL|DRPTBL|UPDATE| CASE | WHEN | THEN |      |SELECT| FROM |LFJOIN|  ON  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |      |      |      |      |      |      |      |WHERE |GRP BY|INJOIN|  AS  |
+ * | Del  |  AS  |      |      | ELSE | END  |      |      |WHERE |GRP BY|INJOIN|  IN  |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|      |      |      |      |      |      |      |TMPTBL|DRPTBL|UPDATE| AND  |
+ * | Shift|      |      |      | TUP  | TDN  |      |      |      |ORD BY|      | AND  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      | _SQL |      |   SpaceFN   |      |  ()  |   =  | SET  |  OR  |
+ * |      |      |      | _SQL |      |    SPACEFN  |      |  ()  |   =  | SET  |  OR  |
  * `-----------------------------------------------------------------------------------'
  */
 
 [_SQL] = LAYOUT_planck_grid(
-    KC_TAB,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, SELECT, FROM,   LFJOIN, SQLON,
-    KC_DEL,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WHERE,  GRP_BY, INJOIN, SQLAS,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TMPTBL, DRPTBL, UPDATE, SQLAND,
-    XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, XXXXXXX, PARAN,  KC_EQL, SQLSET, SQLOR
+    KC_TAB,  TMPTBL,  DRPTBL,  UPDATE,  SQLCASE, SQLWHEN, SQLTHEN, XXXXXXX, SELECT,  FROM,   LFJOIN,  SQLON,
+    KC_DEL,  SQLAS,   XXXXXXX, XXXXXXX, SQLELSE, SQLEND,  XXXXXXX, XXXXXXX, SQLWHR,  GRP_BY, INJOIN,  SQLIN,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, SQLTUP,  SQLTLR,  XXXXXXX, XXXXXXX, XXXXXXX, ORD_BY, XXXXXXX, SQLAND,
+    XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, XXXXXXX, PARAN,   KC_EQL, SQLSET,  SQLOR
 ),
 
 /* NUM
@@ -230,7 +238,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     XXXXXXX, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
     EXT_PLV, XXXXXXX, XXXXXXX, KC_C,    KC_V,    XXXXXXX, XXXXXXX, KC_N,    KC_M,    XXXXXXX, XXXXXXX, XXXXXXX
 ),
-
 
 /* Adjust (Lower + Raise)
  *                      v------------------------RGB CONTROL--------------------v
@@ -546,7 +553,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 
-    case WHERE:
+    case SQLWHR:
       if (record->event.pressed) {
           SEND_STRING("WHERE ");
       } else {
@@ -557,6 +564,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case GRP_BY:
       if (record->event.pressed) {
           SEND_STRING("GROUP BY ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case ORD_BY:
+      if (record->event.pressed) {
+          SEND_STRING("ORDER BY ");
       } else {
         // When keycode is released
       }
@@ -602,6 +617,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 
+    case SQLIN:
+      if (record->event.pressed) {
+          SEND_STRING("IN ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
     case SQLAS:
       if (record->event.pressed) {
           SEND_STRING("AS ");
@@ -642,6 +665,68 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 
+    case SQLCASE:
+      if (record->event.pressed) {
+          SEND_STRING("CASE ");
+          tap_code(KC_ENT);  // Move cursor to next line
+          tap_code(KC_TAB);  // Tab cursor
+          SEND_STRING("WHEN ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLWHEN:
+      if (record->event.pressed) {
+          SEND_STRING("WHEN ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLTHEN:
+      if (record->event.pressed) {
+          SEND_STRING("THEN ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLELSE:
+      if (record->event.pressed) {
+          SEND_STRING("ELSE ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLEND:
+      if (record->event.pressed) {
+          SEND_STRING("END AS ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLTUP:
+      if (record->event.pressed) {
+          SEND_STRING("TRIM(UPPER())");
+          tap_code(KC_LEFT);  // Move cursor between quotes
+          tap_code(KC_LEFT);  // Move cursor between quotes
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLTLR:
+      if (record->event.pressed) {
+          SEND_STRING("TRIM(LOWER())");
+          tap_code(KC_LEFT);  // Move cursor between quotes
+          tap_code(KC_LEFT);  // Move cursor between quotes
+      } else {
+        // When keycode is released
+      }
+      break;
 
   }
   return true;

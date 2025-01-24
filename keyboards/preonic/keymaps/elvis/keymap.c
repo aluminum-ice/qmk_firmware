@@ -47,6 +47,7 @@ enum preonic_layers {
 #define RAISE   MO(_RAISE)
 #define SQL     MO(_SQL)
 #define NUM     TG(_NUM)
+#define SPACEFN LT(_SQL, KC_SPC)
 
 enum preonic_keycodes {
   QWERTY = SAFE_RANGE,
@@ -69,8 +70,9 @@ enum preonic_keycodes {
   PARAN,
   SELECT,
   FROM,
-  WHERE,
+  SQLWHR,
   GRP_BY,
+  ORD_BY,
   LFJOIN,
   INJOIN,
   TMPTBL,
@@ -78,9 +80,17 @@ enum preonic_keycodes {
   UPDATE,
   SQLSET,
   SQLON,
+  SQLIN,
   SQLAS,
   SQLAND,
   SQLOR,
+  SQLCASE,
+  SQLWHEN,
+  SQLTHEN,
+  SQLELSE,
+  SQLEND,
+  SQLTUP,
+  SQLTLR,
   CAPSWORD,
   SNAKECASE,
 };
@@ -138,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Ctrl |  Alt | GUI  | _SQL |_Lower|    Space    |_Raise| Left | Down |  Up  |Right |
+ * | Ctrl |  Alt | GUI  | _SQL |_Lower|    SPACEFN  |_Raise| Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_preonic_grid(
@@ -146,7 +156,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,      KC_BSPC,
   KC_ESC,   HOME_A,  HOME_S,  HOME_D,  HOME_F,  KC_G,    KC_H,    HOME_J,  HOME_K,  HOME_L,  HOME_SCLN, KC_QUOT,
   KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,   KC_ENT,
-  KC_LCTL,  KC_LALT, KC_LGUI, SQL,     LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,     KC_RGHT
+  KC_LCTL,  KC_LALT, KC_LGUI, SQL,     LOWER,   SPACEFN, SPACEFN, RAISE,   KC_LEFT, KC_DOWN, KC_UP,     KC_RGHT
 ),
 
 
@@ -160,7 +170,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |   -  |   =  |   [  |   ]  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | _NUM | Ctrl |  Alt | GUI  |_Lower|    Space    |_Raise| Home | PgUP | PgDN |  End |
+ * | _NUM | Ctrl |  Alt | GUI  |_Lower|    SPACEFN  |_Raise| Home | PgUP | PgDN |  End |
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = LAYOUT_preonic_grid(
@@ -182,7 +192,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Shift|  <>  |  {}  |  ()  |  []  |  ``  |      |CHKOUT|STATUS|BRANCH| PULL |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | _NUM | Ctrl |  Alt | GUI  |_Lower|    Space    |_Raise| Next | Vol- | Vol+ | Play |
+ * | _NUM | Ctrl |  Alt | GUI  |_Lower|    SPACEFN  |_Raise| Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = LAYOUT_preonic_grid(
@@ -198,22 +208,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |  -   |
  * |-----------------------------------------------------------------------------------|
- * | Tab  |      |      |      |      |      |      |      |SELECT| FROM |LFJOIN|  ON  |
+ * | Tab  |TMPTBL|DRPTBL|UPDATE| CASE | WHEN | THEN |      |SELECT| FROM |LFJOIN|  ON  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |      |      |      |      |      |      |      |WHERE |GRP BY|INJOIN|  AS  |
+ * | Del  |  AS  |      |      | ELSE | END  |      |      |WHERE |GRP BY|INJOIN|  IN  |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|      |      |      |      |      |      |      |TMPTBL|DRPTBL|UPDATE| AND  |
+ * | Shift|      |      |      | TUP  | TDN  |      |      |      |ORD BY|      | AND  |›
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      | _SQL |      |    Space    |      |  ()  |   =  | SET  |  OR  |
+ * |      |      |      | _SQL |      |    SPACEFN  |      |  ()  |   =  | SET  |  OR  |
  * `-----------------------------------------------------------------------------------'
  */
 
 [_SQL] = LAYOUT_preonic_grid(
-    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,  KC_0,   KC_MINS,
-    KC_TAB,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, SELECT, FROM,   LFJOIN, SQLON,
-    KC_DEL,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WHERE,  GRP_BY, INJOIN, SQLAS,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TMPTBL, DRPTBL, UPDATE, SQLAND,
-    XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, XXXXXXX, PARAN,  KC_EQL, SQLSET, SQLOR
+    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,  KC_0,     KC_MINS,
+    KC_TAB,  TMPTBL,  DRPTBL,  UPDATE,  SQLCASE, SQLWHEN, SQLTHEN, XXXXXXX, SELECT,  FROM,   LFJOIN,  SQLON,
+    KC_DEL,  SQLAS,   XXXXXXX, XXXXXXX, SQLELSE, SQLEND,  XXXXXXX, XXXXXXX, SQLWHR,  GRP_BY, INJOIN,  SQLIN,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, SQLTUP,  SQLTLR,  XXXXXXX, XXXXXXX, XXXXXXX, ORD_BY, XXXXXXX, SQLAND,
+    XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, XXXXXXX, PARAN,   KC_EQL, SQLSET,  SQLOR
 ),
 
 /* NUM
@@ -226,7 +236,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|      |      |      |      |      |      |  7   |  8   |  9   |  *   |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |_QWRTY| Ctrl | Alt  | GUI  |      |    Space    |  0   |  .   |  =   |  /   |      |
+ * |_QWRTY| Ctrl | Alt  | GUI  |      |    SPACEFN  |  0   |  .   |  =   |  /   |      |
  * `-----------------------------------------------------------------------------------'
  */
 
@@ -509,7 +519,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 
-    case WHERE:
+    case SQLWHR:
       if (record->event.pressed) {
           SEND_STRING("WHERE ");
       } else {
@@ -520,6 +530,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case GRP_BY:
       if (record->event.pressed) {
           SEND_STRING("GROUP BY ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case ORD_BY:
+      if (record->event.pressed) {
+          SEND_STRING("ORDER BY ");
       } else {
         // When keycode is released
       }
@@ -565,6 +583,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 
+    case SQLIN:
+      if (record->event.pressed) {
+          SEND_STRING("IN ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
     case SQLAS:
       if (record->event.pressed) {
           SEND_STRING("AS ");
@@ -600,6 +626,69 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case DRPTBL:
       if (record->event.pressed) {
           SEND_STRING("DROP TABLE IF EXISTS ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLCASE:
+      if (record->event.pressed) {
+          SEND_STRING("CASE ");
+          tap_code(KC_ENT);  // Move cursor to next line
+          tap_code(KC_TAB);  // Tab cursor
+          SEND_STRING("WHEN ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLWHEN:
+      if (record->event.pressed) {
+          SEND_STRING("WHEN ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLTHEN:
+      if (record->event.pressed) {
+          SEND_STRING("THEN ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLELSE:
+      if (record->event.pressed) {
+          SEND_STRING("ELSE ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLEND:
+      if (record->event.pressed) {
+          SEND_STRING("END AS ");
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLTUP:
+      if (record->event.pressed) {
+          SEND_STRING("TRIM(UPPER())");
+          tap_code(KC_LEFT);  // Move cursor between quotes
+          tap_code(KC_LEFT);  // Move cursor between quotes
+      } else {
+        // When keycode is released
+      }
+      break;
+
+    case SQLTLR:
+      if (record->event.pressed) {
+          SEND_STRING("TRIM(LOWER())");
+          tap_code(KC_LEFT);  // Move cursor between quotes
+          tap_code(KC_LEFT);  // Move cursor between quotes
       } else {
         // When keycode is released
       }
