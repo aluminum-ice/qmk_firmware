@@ -48,7 +48,7 @@
 //#define MIDI_TONE_KEYCODE_OCTAVES 2
 
 // Configure the global tapping term (default: 200ms)
-#define TAPPING_TERM 175
+#define TAPPING_TERM 200
 
 // Prevent normal rollover on alphas from accidentally triggering mods.
 // "IGNORE_MOD_TAP_INTERRUPT is no longer necessary as it is now the default behavior of mod-tap keys
