@@ -33,7 +33,6 @@
         "pin": "D3"
     },
     "rgblight": {
-        "led_count": 72,
         "split_count": [36, 36],
         "sleep": true
     },

@@ -22,6 +22,8 @@
 
 ///https://thomasbaart.nl/2018/12/01/reducing-firmware-size-in-qmk/
 
+#define RGBLED_NUM 72
+#define RGBLIGHT_LED_COUNT RGBLED_NUM
 
 #define MASTER_LEFT
 // #define MASTER_RIGHT
