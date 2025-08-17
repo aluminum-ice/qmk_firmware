@@ -21,6 +21,7 @@
 #include QMK_KEYBOARD_H
 #include "muse.h"
 #include "features/casemodes.h"
+#include "process_unicode.h"
 
 // Left-hand home row mods
 #define HOME_A LCTL_T(KC_A)
@@ -113,6 +114,16 @@ combo_t key_combos[] = {
   [BSPC_LSFT_CLEAR] = COMBO_ACTION(clear_line_combo),
 };
 /* COMBO_ACTION(x) is same as COMBO(x, KC_NO) */
+
+
+
+void keyboard_post_init_user(void) {
+    // Pick ONE that matches your OS:
+    set_unicode_input_mode(UNICODE_MODE_MACOS);  // macOS
+    // set_unicode_input_mode(UC_LNX);  // Linux (IBus)
+    // set_unicode_input_mode(UC_WINC);    // Windows (Win+.)
+    // set_unicode_input_mode(UC_BSD);  // BSD
+}
 
 /* Process combos */
 void process_combo_event(uint16_t combo_index, bool pressed) {
@@ -307,6 +318,41 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   // Process case modes
   if (!process_case_modes(keycode, record)) {
       return false;
+  }
+
+  /* Alt + Right Arrow → » (U+00BB)
+   * Uses UNICODE_ENABLE path (hex-string), macOS input mode already set in keyboard_post_init_user.
+   * We check specifically for Left Alt to avoid interfering with AltGr on some layouts.
+   */
+  if (record->event.pressed) {
+      uint8_t mods = get_mods() | get_oneshot_mods() | get_weak_mods();
+      bool lalt_held = (mods & MOD_BIT(KC_LALT)) != 0;
+
+      if (lalt_held && keycode == KC_RGHT) {
+          /* Temporarily drop Alt so it doesn't affect Unicode input */
+          uint8_t saved_mods = get_mods();
+          del_mods(MOD_MASK_ALT);
+          clear_oneshot_mods();
+          del_weak_mods(MOD_MASK_ALT);
+
+          send_unicode_string("»"); /* U+00BB */
+
+          set_mods(saved_mods);
+          return false; /* swallow original Alt+Right */
+      }
+
+      if (lalt_held && keycode == KC_LEFT) {
+          /* Temporarily drop Alt so it doesn't affect Unicode input */
+          uint8_t saved_mods = get_mods();
+          del_mods(MOD_MASK_ALT);
+          clear_oneshot_mods();
+          del_weak_mods(MOD_MASK_ALT);
+
+          send_unicode_string("«"); /* U+00AB */
+
+          set_mods(saved_mods);
+          return false; /* swallow original Alt+Left */
+      }
   }
 
   switch (keycode) {
