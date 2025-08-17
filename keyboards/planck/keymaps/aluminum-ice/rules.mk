@@ -4,3 +4,4 @@ endif
 SRC += features/casemodes.c
 
 COMBO_ENABLE = yes
+UNICODE_ENABLE = yes
