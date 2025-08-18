@@ -65,6 +65,7 @@ enum preonic_keycodes {
   GITBRCH, // git branch -a
   APTUP,   // apt-get update && apt-get dist-upgrade
   ANGLE,
+  EMDASH, 
   BRACK,
   TICK,
   CURLY,
@@ -199,7 +200,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |-----------------------------------------------------------------------------------|
  * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | CAPS |      |SNAKE |      |      |APTUP |      | CLONE|  ADD |COMMIT| PUSH |  |   |
+ * | CAPS |      |SNAKE |EMDASH|      |APTUP |      | CLONE|  ADD |COMMIT| PUSH |  |   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Shift|  <>  |  {}  |  ()  |  []  |  ``  |      |CHKOUT|STATUS|BRANCH| PULL |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -209,7 +210,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_RAISE] = LAYOUT_preonic_grid(
     KC_F1,    KC_F2,   KC_F3,     KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
     KC_GRV,   KC_1,    KC_2,      KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
-    CAPSWORD, XXXXXXX, SNAKECASE, XXXXXXX, XXXXXXX, APTUP,   XXXXXXX, GITCLN,  GITADD,  GITCOMM, GITPUSH, KC_PIPE,
+    CAPSWORD, XXXXXXX, SNAKECASE, EMDASH,  XXXXXXX, APTUP,   XXXXXXX, GITCLN,  GITADD,  GITCOMM, GITPUSH, KC_PIPE,
     _______,  ANGLE,   CURLY,     PARAN,   BRACK,   TICK,    XXXXXXX, GITCHK,  GITSTAT, GITBRCH, GITPULL, _______,
     NUM,      KC_LCTL, KC_LALT,   KC_LGUI, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
@@ -415,6 +416,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         tap_code16(LALT(LCMD(LSFT(KC_D))));
         return false;
+      }
+      break;
+
+    case EMDASH:
+      if (record->event.pressed) {
+          send_unicode_string("—"); /* U+2014 */
+      } else {
+        // When keycode is released
       }
       break;
 
