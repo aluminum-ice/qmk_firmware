@@ -124,7 +124,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* Changed KC_LCMD to LCMD_T(KC_NO) and KC_RCMD to RCMD_T(KC_NO) to enable taps to shift desktops - 2022 Apr 14 */
   /* Changed KC_F13 to KC_HOME - 2022 May 15 */
   [0] = LAYOUT(
-    KC_ESC,  KC_BRID, KC_BRIU,       KC_MSCTRL,  KC_LNPD, RGB_VAD, RGB_VAI, KC_F7,   KC_F8,   KC_MRWD, KC_MPLY,       KC_MFFD, KC_F12,  MO(1),              KC_MUTE,
+    KC_ESC,  KC_BRID, KC_BRIU,       KC_MSCTRL,  KC_LNPD, RM_VALD, RM_VALU, KC_F7,   KC_F8,   KC_MRWD, KC_MPLY,       KC_MFFD, KC_F12,  MO(1),              KC_MUTE,
     KC_GRV,  KC_1,    KC_2,          KC_3,       KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,          KC_MINS, KC_EQL,  KC_BSPC,            KC_DEL,
     KC_TAB,  KC_Q,    KC_W,          KC_E,       KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,          KC_LBRC, KC_RBRC, KC_BSLS,            KC_PGUP,
     KC_CAPS, HOME_A,  HOME_S,        HOME_D,     HOME_F,  KC_G,    KC_H,    HOME_J,  HOME_K,  HOME_L,  HOME_SCLN,     KC_QUOT,          KC_ENT,             KC_PGDN,
@@ -134,12 +134,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Changed KC_U to TEST1, KC_I to TEST2 and KC_O to TEST3 - 2022 May 14 */
   [1] = LAYOUT(
-    EE_CLR,   KC_F1,   KC_F2,        KC_F3,      KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,        KC_F11,   KC_F12,  _______,           RGB_TOG,
+    EE_CLR,   KC_F1,   KC_F2,        KC_F3,      KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,        KC_F11,   KC_F12,  _______,           RM_TOGG,
     LED_TLDE, LED_1,   LED_2,        LED_3,      LED_4,   LED_5,   LED_6,   LED_7,   LED_8,   LED_9,   LED_0,         LED_MINS, LED_EQL, _______,           KC_PSCR,
-    _______,  RGB_HUI, RGB_VAI,      RGB_SAI,    _______, _______, _______, _______, _______, _______, _______,       _______,  _______, RESET,             _______,
-    _______,  RGB_HUD, RGB_VAD,      RGB_SAD,    TG(2),   _______, _______, _______, _______, _______, _______,       _______,           _______,           _______,
-    _______,           _______,      _______,    _______, _______, _______, NK_TOGG, _______, _______, _______,       _______,           _______, RGB_MOD,  RGB_TOG,
-    _______,  _______, _______,                                 _______,                               _______,       _______,  _______, RGB_SPD, RGB_RMOD, RGB_SPI
+    _______,  RM_HUEU, RM_VALU,      RM_SATU,    _______, _______, _______, _______, _______, _______, _______,       _______,  _______, RESET,             _______,
+    _______,  RM_HUED, RM_VALD,      RM_SATD,    TG(2),   _______, _______, _______, _______, _______, _______,       _______,           _______,           _______,
+    _______,           _______,      _______,    _______, _______, _______, NK_TOGG, _______, _______, _______,       _______,           _______, RM_NEXT,  RM_TOGG,
+    _______,  _______, _______,                                 _______,                               _______,       _______,  _______, RM_SPDD, RM_PREV,  RM_SPDU
   ),
 
   // This is an alternative togglable layer to change default function row to standard F keys
@@ -400,7 +400,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       // case RGB_VAI:
       // case RGB_VAD:
       // case RGB_SPI:
-      case RGB_SPD:
+      case RM_SPDD:
         if (record->event.pressed) {
           if (rgb_matrix_get_flags() != LED_FLAG_ALL) {
             /* Ignore changes to RGB settings while only it's supposed to be OFF */
@@ -409,7 +409,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         }
         break;
 
-      case RGB_TOG:
+      case RM_TOGG:
         // if (record->event.pressed) {
         //     if (rgb_matrix_get_flags() == LED_FLAG_ALL) {
         //         rgb_matrix_set_flags(LED_FLAG_NONE);
