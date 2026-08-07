@@ -39,7 +39,7 @@ jobs:
       - name: Compile firmware
         run: qmk compile -kb "${{ matrix.keyboard }}" -km aluminum-ice
 
-      - name: Upload firmware
+      - name: Upload build artifact
         uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.name }}-aluminum-ice
@@ -48,3 +48,36 @@ jobs:
             *.hex
             *.uf2
           if-no-files-found: error
+
+  release:
+    name: Create GitHub release
+    needs: build
+    runs-on: ubuntu-latest
+
+    # Only publish releases for firmware-* tags.
+    if: startsWith(github.ref, 'refs/tags/firmware-')
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download firmware artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: "*-aluminum-ice"
+          path: firmware
+          merge-multiple: true
+
+      - name: Create checksums
+        working-directory: firmware
+        run: sha256sum * > SHA256SUMS.txt
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            firmware/* \
+            --verify-tag \
+            --generate-notes \
+            --title "QMK Firmware ${GITHUB_REF_NAME}"
