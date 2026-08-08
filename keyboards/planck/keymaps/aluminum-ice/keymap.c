@@ -101,16 +101,15 @@ enum planck_keycodes {
 
 /* Define combos  */
 enum combo_events {
-  BSPC_LSFT_CLEAR,
-  COMBO_LENGTH
+  BSPC_LSFT_CLEAR
 };
-uint16_t COMBO_LEN = COMBO_LENGTH; // remove the COMBO_COUNT define and use this instead!
 
 const uint16_t PROGMEM clear_line_combo[] = {KC_BSPC, KC_LSFT, COMBO_END};
 
 combo_t key_combos[] = {
   [BSPC_LSFT_CLEAR] = COMBO_ACTION(clear_line_combo),
 };
+uint16_t COMBO_LEN = ARRAY_SIZE(key_combos);
 /* COMBO_ACTION(x) is same as COMBO(x, KC_NO) */
 
 /* Process combos */
@@ -271,6 +270,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
     state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 
+#ifdef RGBLIGHT_ENABLE
     switch (get_highest_layer(state)) {
     case _RAISE:
         rgblight_setrgb (RGB_RED);
@@ -294,6 +294,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         rgblight_setrgb (RGB_CYAN);
         break;
     }
+#endif
 
   return state;
 }
@@ -301,53 +302,23 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 
 
-// // Light LEDs 6 to 9 and 12 to 15 red when caps lock is active. Hard to ignore!
-// const rgblight_segment_t PROGMEM my_capslock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-//     {6, 4, HSV_RED},       // Light 4 LEDs, starting with LED 6
-//     {12, 4, HSV_RED}       // Light 4 LEDs, starting with LED 12
-// );
-// // Light LEDs 9 & 10 in cyan when keyboard layer 1 is active
-// const rgblight_segment_t PROGMEM my_layer1_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-//     {9, 2, HSV_CYAN}
-// );
-// // Light LEDs 11 & 12 in purple when keyboard layer 2 is active
-// const rgblight_segment_t PROGMEM my_layer2_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-//     {11, 2, HSV_PURPLE}
-// );
-// // Light LEDs 13 & 14 in green when keyboard layer 3 is active
-// const rgblight_segment_t PROGMEM my_layer3_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-//     {13, 2, HSV_GREEN}
-// );
+static void send_unicode_preserving_mods(uint32_t code_point) {
+  const uint8_t saved_mods = get_mods();
+  const uint8_t saved_weak_mods = get_weak_mods();
+  const uint8_t saved_oneshot_mods = get_oneshot_mods();
 
-// // Now define the array of layers. Later layers take precedence
-// const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
-//     my_capslock_layer,
-//     my_layer1_layer,    // Overrides caps lock layer
-//     my_layer2_layer,    // Overrides other layers
-//     my_layer3_layer     // Overrides other layers
-// );
+  clear_mods();
+  clear_weak_mods();
+  clear_oneshot_mods();
+  send_keyboard_report();
 
-// void keyboard_post_init_user(void) {
-//     // Enable the LED layers
-//     rgblight_layers = my_rgb_layers;
-// }
+  register_unicode(code_point);
 
-// bool led_update_user(led_t led_state) {
-//     rgblight_set_layer_state(0, led_state.caps_lock);
-//     return true;
-// }
-
-// layer_state_t default_layer_state_set_user(layer_state_t state) {
-//     rgblight_set_layer_state(1, layer_state_cmp(state, _RAISE));
-//     return state;
-// }
-
-// layer_state_t layer_state_set_user(layer_state_t state) {
-//     rgblight_set_layer_state(2, layer_state_cmp(state, _FN));
-//     rgblight_set_layer_state(3, layer_state_cmp(state, _LOWER));
-//     return state;
-// }
-
+  set_mods(saved_mods);
+  set_weak_mods(saved_weak_mods);
+  set_oneshot_mods(saved_oneshot_mods);
+  send_keyboard_report();
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   // Process case modes
@@ -355,49 +326,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
   }
 
-  /* Alt + Right Arrow → » (U+00BB)
-   * Uses UNICODE_ENABLE path (hex-string), macOS input mode already set in keyboard_post_init_user.
-   * We check specifically for Left Alt to avoid interfering with AltGr on some layouts.
-   */
   if (record->event.pressed) {
-      uint8_t mods = get_mods() | get_oneshot_mods() | get_weak_mods();
-      bool lalt_held = (mods & MOD_BIT(KC_LALT)) != 0;
+      const uint8_t active_mods = get_mods() | get_oneshot_mods() | get_weak_mods();
 
-      if (lalt_held && keycode == KC_RGHT) {
-          /* Temporarily drop Alt so it doesn't affect Unicode input */
-          uint8_t saved_mods = get_mods();
-          del_mods(MOD_MASK_ALT);
-          clear_oneshot_mods();
-          del_weak_mods(MOD_MASK_ALT);
-
-          send_unicode_string("»"); /* U+00BB */
-
-          set_mods(saved_mods);
-          return false; /* swallow original Alt+Right */
-      }
-
-      if (lalt_held && keycode == KC_LEFT) {
-          /* Temporarily drop Alt so it doesn't affect Unicode input */
-          uint8_t saved_mods = get_mods();
-          del_mods(MOD_MASK_ALT);
-          clear_oneshot_mods();
-          del_weak_mods(MOD_MASK_ALT);
-
-          send_unicode_string("«"); /* U+00AB */
-
-          set_mods(saved_mods);
-          return false; /* swallow original Alt+Left */
+      if (active_mods & MOD_BIT(KC_LALT)) {
+          switch (keycode) {
+            case KC_RGHT:
+              send_unicode_preserving_mods(0x00BB); // »
+              return false;
+            case KC_LEFT:
+              send_unicode_preserving_mods(0x00AB); // «
+              return false;
+          }
       }
   }
 
   switch (keycode) {
     case QWERTY:
       if (record->event.pressed) {
-        print("mode just switched to qwerty and this is a huge string\n");
         set_single_persistent_default_layer(_QWERTY);
       }
       return false;
-      break;
     case PLOVER:
       if (record->event.pressed) {
         #ifdef AUDIO_ENABLE
@@ -416,7 +365,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         eeconfig_update_keymap(&keymap_config);
       }
       return false;
-      break;
     case EXT_PLV:
       if (record->event.pressed) {
         #ifdef AUDIO_ENABLE
@@ -425,7 +373,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_PLOVER);
       }
       return false;
-      break;
 
 
     /* Capture portion of the screen selected through the mouse (MacOS) */
@@ -445,11 +392,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     case EMDASH:
       if (record->event.pressed) {
-          send_unicode_string("—"); /* U+2014 */
-      } else {
-        // When keycode is released
+          // Native macOS shortcut for an em dash on a US layout.
+          tap_code16(A(S(KC_MINS)));
       }
-      break;
+      return false;
 
     case GITCLN:
       if (record->event.pressed) {
@@ -580,7 +526,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           enable_xcase_with(KC_UNDS);
       }
       return false;
-      break;
 
     case SELECT:
       if (record->event.pressed) {
@@ -784,18 +729,20 @@ uint8_t muse_offset = 70;
 uint16_t muse_tempo = 50;
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
+  (void)index;
+
   if (muse_mode) {
     if (IS_LAYER_ON(_RAISE)) {
-      if (clockwise) {
+      if (clockwise && muse_offset < 127) {
         muse_offset++;
-      } else {
+      } else if (!clockwise && muse_offset > 0) {
         muse_offset--;
       }
     } else {
-      if (clockwise) {
-        muse_tempo+=1;
-      } else {
-        muse_tempo-=1;
+      if (clockwise && muse_tempo < 1000) {
+        muse_tempo++;
+      } else if (!clockwise && muse_tempo > 1) {
+        muse_tempo--;
       }
     }
   } else {
